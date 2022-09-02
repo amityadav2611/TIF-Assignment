@@ -1,6 +1,5 @@
 const schoolModel = require("../models/schoolModel");
 const studentModel = require("../models/studentModel")
-const userModel = require("../models/userModel")
 
 const createSchool = async (req, res) => {
     try {
@@ -8,8 +7,8 @@ const createSchool = async (req, res) => {
         
         if (Object.keys(data).length == 0) return res.status(400).send({ status: false, Error: "Input Data is Missing" }) 
 
-        //we are creating the document using roleModel
-        let savedData = await schoolModel.create(data) //we are creating the document using authorModel
+        //we are creating the document using schoolModel
+        let savedData = await schoolModel.create(data)
         delete savedData._doc.__v
         if (!savedData) return res.status(404).send({ status: false, Error: "Failed to Create School Model" }) 
         res.status(201).send({status: true, content:{data: savedData} })
@@ -21,6 +20,7 @@ const createSchool = async (req, res) => {
 let getSchool = async (req, res) => {
     try {
         let data = req.query;
+
         //finding the document in collection
         let schools = await schoolModel.find(data).select({__v:0})  
         res.status(200).send({ status: true, content:{data: schools} })  //it will send the data to response body
@@ -34,10 +34,8 @@ let getSchool = async (req, res) => {
 const schoolDetails = async (req, res) => {
     try {
         let schoolName = req.query;
-        //console.log("1-->",schoolName)
 
         let getSchoolData = await schoolModel.find(schoolName).select({__v:0}).lean();
-       // console.log("2-->",getSchoolData)
         if (!getSchoolData) return res.status(404).send({ status: false, message: "College not found! check the name and try again" }); 
 
         for(let i of getSchoolData){
@@ -45,7 +43,6 @@ const schoolDetails = async (req, res) => {
             i.students = students
             
         }
-        console.log(getSchoolData)
 
         res.status(200).send({ status: true, content: {data: getSchoolData} });
     } catch (err) {

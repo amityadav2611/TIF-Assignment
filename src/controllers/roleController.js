@@ -7,7 +7,7 @@ const createRole = async (req, res) => {
         if (Object.keys(data).length == 0) return res.status(400).send({ status: false, Error: "Input Data is Missing" }) 
 
         //we are creating the document using roleModel
-        let savedData = await roleModel.create(data) //we are creating the document using authorModel
+        let savedData = await roleModel.create(data)
         delete savedData._doc.__v
         if (!savedData) return res.status(404).send({ status: false, Error: "Failed to Create Role Model" }) 
         res.status(201).send({status: true, content:{data: savedData} })   //sending the data in the respond body
@@ -19,6 +19,7 @@ const createRole = async (req, res) => {
 let getRoles = async (req, res) => {
     try {
         let data = req.query;
+        
         //finding the document in collection
         let roles = await roleModel.find(data).select({__v:0})  
         res.status(200).send({ status: true, content:{data: roles} })  //it will send the data to response body

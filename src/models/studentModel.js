@@ -1,12 +1,3 @@
-// Table Student {
-//     _id ObjectId
-//     name String
-//     userId ObjectId [ref: > User._id]
-//     schoolId ObjectId [ref: > School._id]
-//     created DateTime
-//     updated DateTime
-//   }
-
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Schema.Types.ObjectId
 

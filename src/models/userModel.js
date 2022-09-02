@@ -1,13 +1,3 @@
-// Table User {
-//     _id ObjectId
-//     name String
-//     email String [unique]
-//     password String
-//     created DateTime
-//     roleId ObjectId [ref: > Role._id, default: null]
-//     updated DateTime
-//   }
-
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Schema.Types.ObjectId
 

@@ -1,7 +1,8 @@
 const userModel = require("../models/userModel")
+//const roleModel = require("../models/roleModel")
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
-const validator = require("express-validator")
+const validation = require("../utils/userValidations")
 
 
 const createUser = async (req, res) => {
@@ -15,7 +16,7 @@ const createUser = async (req, res) => {
         data.password = await bcrypt.hash(data.password, salt)
 
         //we are creating the document using userModel
-        let savedData = await userModel.create(data) //we are creating the document using authorModel
+        let savedData = await userModel.create(data)
         delete savedData._doc.__v
         if (!savedData) return res.status(404).send({ status: false, Error: "Failed to Create user Model" }) 
         res.status(201).send({status: true, content:{data: savedData} })   //sending the data in the respond body
@@ -47,14 +48,11 @@ const siginUser = async (req, res) => {
         if(!passwordData) return res.status(400).send({status: false, message: "Password is incorrect"})
 
         //generate token
-        let token = jwt.sign({ userId: getEmailData._id }, "Tif-Assignment", {expiresIn: '1d'});
+        let token = jwt.sign({ userId: getEmailData._id, roleId: getEmailData.roleId }, "Tif-Assignment", {expiresIn: '1d'});
 
         //assign the userdId in a variable
         let userData = getEmailData._doc;
         delete userData.__v;
-
-        //set the headers
-        //res.status(200).setHeader("x-api-key", token);
 
         res.status(200).send({status: false, content:{data:userData,token}})
         
@@ -66,6 +64,7 @@ const siginUser = async (req, res) => {
 let allUser = async (req, res) => {
     try {
         let data = req.query;
+
         //finding the document in collection
         let myUsers = await userModel.find(data).select({password:0, __v:0})  
         res.status(200).send({ status: true, content:{data: myUsers} })

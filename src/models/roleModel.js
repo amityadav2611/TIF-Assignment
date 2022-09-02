@@ -1,11 +1,3 @@
-// Table Role {
-//     _id ObjectId
-//     name String
-//     scopes Array(String)
-//     created DateTime
-//     updated DateTime
-//   }
-
 const mongoose = require('mongoose');
 
 const roleSchema = new mongoose.Schema({
